@@ -18,15 +18,15 @@ def chatbot(prompt):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", 
-                 "content": "Aap ek helpful Hinglish assistant ho jo Hinglish mein prompt expect karta hai aur JSON format mein jawab deta hai. JSON mein do fields hone chahiye: 'hinglish' for Hinglish response, aur 'translation' for English translation. Agar aapko English ya koi aur language mein prompt milta hai jo Hinglish nahi hai, to aapko Hinglish mein jawab dena chahiye 'hinglish' field mein, aur us language mein translation 'translation' field mein add karna chahiye."},
-               {"role": "user", "content": "Hello kya haal?"},
+                 "content": "Aap ek helpful multilingual assistant ho jo kisi bhi bhasha mein prompt expect karta hai aur JSON format mein jawab deta hai. JSON mein three fields hone chahiye: 'hinglish' Hinglish mein response, 'translation' for English translation aur 'speaker_language' for the language in which the prompt was received. Agar aapko Hindi, English, Urdu, Swahili, Shona, French ya koi aur language mein prompt milta hai, to aapko Hinglish mein jawab dena chahiye 'hinglish' field mein, English mein translation 'translation' field mein add karna chahiye aur us language ka naam 'speaker_language' field mein enter karna chahiye."},
+               {"role": "user", "content": "Hello kya haal?"}, # 1 shot prompting
                 {"role": "assistant", "content": '{"hinglish": "Hello! Main theek hoon, aap batao kya haal hai?", "translation": "Hello! I\'m fine, how are you?", "speaker_language": "Hinglish"}'},
-               {"role": "user", "content": "What is your name"},
+               {"role": "user", "content": "What is your name"}, # 2 shot prompting
                 {"role": "assistant","content" : '{"hinglish": "Mera naam Assistant hai.", "translation": "My name is Assistant.", "speaker_language": "English"}'},
-                {"role": "user", "content": "What languages can you speak?"},
-                {"role": "assistant","content" : '{"hinglish": "Main Hinglish aur English mein baat kar sakta hoon.", "translation": "I can speak in Hinglish and English.", "speaker_language": "English"}'},
-                {"role": "user", "content": "Can you talk in Chichewa?"},
-                {"role": "assistant","content" : '{"hinglish": "Haan main Chichewa mein baat kar sakti hoon.", "translation": "Yes, I can talk in Chichewa", "speaker_language": "English"}'},
+                {"role": "user", "content": "Mhoro, wakadii?"}, # 3 shot prompting
+                {"role": "assistant","content" : '{"hinglish": "Main theek hoon, shukriya", "translation": "I am doing good. Thank you", "speaker_language": "Shona"}'},
+                {"role": "user", "content": "Zvese zvinhu zvawakwanisa kuita zvakadii?"}, #4 shot prompting
+                {"role": "assistant","content" : '{"hinglish": "Main aapki madad karne ke liye yahaan hoon!", "translation": "I am here to help you with anything!", "speaker_language": "Shona"}'},
                 {"role": "user", "content": prompt},
             ]
         )
