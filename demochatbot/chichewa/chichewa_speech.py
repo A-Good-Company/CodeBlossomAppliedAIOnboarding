@@ -16,18 +16,18 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 model = whisper.load_model('base') 
 
 def record_audio(duration=5, samplerate=16000):
-    print("Recording...")
+    print("Kulemba mawu...")
     audio_data = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='float32')
-    sd.wait()  # Wait until recording is finished
-    print("Recording complete.")
+    sd.wait()  # Dikirani mpaka kulembedwa kumaliza
+    print("Kulembedwa kwatha.")
     return np.squeeze(audio_data)
 
 def transcribe_audio(audio_data, samplerate=16000):
-    print("Transcribing...")
+    print("Kutembenuza mawu kukhala malemba...")
     # Whisper model expects np.ndarray as input with shape (samples,)
     result = model.transcribe(audio_data, language='en')
     text = result['text']
-    print("Transcription complete.")
+    print("Kutembenuza kwatha.")
     return text.strip()
 
 def chatbot(prompt):
@@ -60,7 +60,7 @@ def chatbot(prompt):
         parsed_message = json.loads(message)
         # Ensure required keys are present
         if 'chichewa' not in parsed_message or 'translation' not in parsed_message:
-            raise ValueError("Missing required keys in JSON response")
+            raise ValueError("Keys zofunikira zasowa mu JSON response")
         return parsed_message
     except (json.JSONDecodeError, ValueError) as e:
         # Handle errors in JSON parsing
@@ -71,29 +71,29 @@ def chatbot(prompt):
 
 def main():
     while True:
-        print("Type 'record' to use voice input or 'type' to enter your question manually. Type 'exit' to quit.")
-        method = input("Choose input method: ").lower()
+        print("Lembani 'record' ngati mukufuna kugwiritsa ntchito mawu kapena 'type' kuti mulembere funso lanu. Lembani 'exit' kuti mutuluke.")
+        method = input("Sankhani njira: ").lower()
 
         if method == 'exit':
-            print("Goodbye!")
+            print("Tsalani bwino!")
             break
         elif method == 'record':
-            # Record and transcribe audio
+            # Lembani ndikukweza mawu kukhala malemba
             audio = record_audio()
             transcribed_text = transcribe_audio(audio)
         elif method == 'type':
-            transcribed_text = input("Enter your question: ")
+            transcribed_text = input("Lembani funso lanu: ")
 
-        # Skip to the next loop iteration if no valid transcribed text
+        # Pitilizani kuzungulira lotsatira ngati palibe malemba ovomerezeka
         if not transcribed_text:
             continue
 
-        # Print the transcribed text if recorded
-        print(f"You said: {transcribed_text}")
+        # Sindikizani mawu ofotokozedwa ngati alemba
+        print(f"Munati: {transcribed_text}")
 
-        # Get response from chatbot
+        # Pezani yankho kuchokera ku chatbot
         response = chatbot(transcribed_text)
-        print(f"Response: {response}\n")
+        print(f"Yankho: {response}\n")
 
 if __name__ == "__main__":
     main()
