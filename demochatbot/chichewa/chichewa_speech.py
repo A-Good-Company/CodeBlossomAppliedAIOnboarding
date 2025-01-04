@@ -16,6 +16,7 @@ model = whisper.load_model('base')
 
 def record_audio(duration=5, samplerate=16000):
     print("Recording...")
+    print(sd.query_devices())
     audio_data = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='float32')
     sd.wait()  # Wait until recording is finished
     print("Recording complete.")
