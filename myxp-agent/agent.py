@@ -16,7 +16,7 @@ from typing import Literal
 
 
 @tool
-def get_weather(city: str):
+def get_weather(city: Literal["nyc", "sf", "toronto"]):
     """Use this to get weather information."""
     if city == "nyc":
         return "It might be cloudy in nyc"
@@ -55,6 +55,12 @@ def print_stream(stream):
         else:
             message.pretty_print()
 
+
+inputs = {"messages": [("user", "what is the weather of New York")]}
+print_stream(graph.stream(inputs, stream_mode="values"))
+
+
+print(f"\n\n{"==="*20}\n\n")
 
 inputs = {"messages": [("user", "what is the population of New York")]}
 print_stream(graph.stream(inputs, stream_mode="values"))
