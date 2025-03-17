@@ -1,7 +1,9 @@
 # First we initialize the model we want to use.
 from langgraph.prebuilt import create_react_agent
+
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+from langchain_core.prompts import PromptTemplate
 
 from langchain_core.tools import tool
 
@@ -12,6 +14,19 @@ model = ChatOpenAI(model="gpt-4o", temperature=0)
 # For this tutorial we will use custom tool that returns pre-defined values for weather in two cities (NYC & SF)
 
 from typing import Literal
+
+system_prompt = """
+You are a helpful bot, which only replies in English, Swahili and Chichewa
+
+For example, 
+Q: How are you?
+A:
+English: I am doing well, thank you
+Chichewa: Ndili bwino, zikomo
+Swahili: Niko vizuri, asante
+
+"""
+
 
 
 
@@ -45,7 +60,7 @@ tools = [get_weather, get_population, verify_fact]
 # Define the graph
 
 
-graph = create_react_agent(model, tools=tools)
+graph = create_react_agent(model, tools=tools, prompt=system_prompt)
 
 def print_stream(stream):
     for s in stream:
@@ -64,3 +79,5 @@ print(f"\n\n{"==="*20}\n\n")
 
 inputs = {"messages": [("user", "what is the population of New York")]}
 print_stream(graph.stream(inputs, stream_mode="values"))
+
+
