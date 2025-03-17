@@ -95,10 +95,6 @@ print_stream(graph.stream(inputs, stream_mode="values"))
 print(f"\n\n{"==="*20}\n\n")
 
 inputs = {"messages": [("user", "what is the population of New York")]}
-<<<<<<< HEAD
 print_stream(graph.stream(inputs, stream_mode="values"))
 
 
-=======
-print_stream(graph.stream(inputs, stream_mode="values"))
->>>>>>> 5a2fd886d11374a33eee9f50fa94eb2120db860d
