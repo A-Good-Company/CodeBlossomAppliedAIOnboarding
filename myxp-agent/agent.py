@@ -3,16 +3,11 @@ from langgraph.prebuilt import create_react_agent
 
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from langchain_core.prompts import PromptTemplate
 
 from langchain_core.tools import tool
-
-load_dotenv()
-model = ChatOpenAI(model="gpt-4o", temperature=0)
-
-
-# For this tutorial we will use custom tool that returns pre-defined values for weather in two cities (NYC & SF)
-
+import os
+import openai
+from langchain.prompts import ChatPromptTemplate
 from typing import Literal
 
 system_prompt = """
@@ -29,6 +24,7 @@ Swahili: Niko vizuri, asante
 
 
 
+load_dotenv()
 
 @tool
 def get_weather(city: Literal["nyc", "sf", "toronto"]):
@@ -56,12 +52,33 @@ def verify_fact(statement: str):
 
 tools = [get_weather, get_population, verify_fact]
 
+# Define a custom prompt template
+custom_prompt = ChatPromptTemplate.from_messages([
+    ("system", """You are a helpful AI assistant specialized in providing accurate information about weather and population statistics.And you only talk in chichewa or English
+    When using tools, always:
+    1. Think carefully about which tool is most appropriate
+    2. Use the exact city names as specified in the tool descriptions
+    3. Verify important facts before stating them
+    4. Provide clear, concise responses
+    
+    Available tools:
+    - get_weather: Get weather for nyc, sf, or toronto
+    - get_population: Get population statistics
+    - verify_fact: Verify information before sharing
+    
+    Format your responses professionally and always cite your sources."""),
+    
+    ("assistant", "I'll help you with that request. Let me think about this step by step."),
+])
 
-# Define the graph
+model = ChatOpenAI(model="gpt-4o", temperature=0)
 
+# Rest of your code remains the same until creating the graph
+# When creating the graph, add the custom prompt
 
 graph = create_react_agent(model, tools=tools, prompt=system_prompt)
 
+# Rest of your code remains unchanged
 def print_stream(stream):
     for s in stream:
         message = s["messages"][-1]
@@ -78,6 +95,10 @@ print_stream(graph.stream(inputs, stream_mode="values"))
 print(f"\n\n{"==="*20}\n\n")
 
 inputs = {"messages": [("user", "what is the population of New York")]}
+<<<<<<< HEAD
 print_stream(graph.stream(inputs, stream_mode="values"))
 
 
+=======
+print_stream(graph.stream(inputs, stream_mode="values"))
+>>>>>>> 5a2fd886d11374a33eee9f50fa94eb2120db860d
